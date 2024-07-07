@@ -1,0 +1,32 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model OperationLog {
+  id          String     @id @default(cuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  timestamp   DateTime?
+  operation   Operation? @relation(fields: [operationId], references: [id])
+  operationId String?
+}
+
+model Operation {
+  id            String                      @id @default(cuid())
+  createdAt     DateTime                    @default(now())
+  updatedAt     DateTime                    @updatedAt
+  num1          Float?
+  num2          Float?
+  result        Float?
+  operationType EnumOperationOperationType?
+  operationLogs OperationLog[]
+}
+
+enum EnumOperationOperationType {
+  Option1
+}
